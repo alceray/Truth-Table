@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include <stack>
-#include <unordered_set>
+#include <set>
 #include "valid.h"
+#include "truthtable.h"
 using namespace std;
 
 struct Formula {
@@ -23,7 +24,7 @@ int main() {
     cout << "Use <-> for 'iff'" << endl;
     cout << "List propositional symbols in lower case and exit with a period (eg. abc.):" << endl;
     char ch;
-    unordered_set<char> symbols;
+    set<char> symbols;
     while (cin >> ch) {
         if (ch == '.' || ch == ',') break;
         if ('a' <= ch && ch <= 'z') symbols.insert(ch);
@@ -40,4 +41,8 @@ int main() {
             cout << "Invalid formula" << endl;
         }
     }
+    // for (auto s : symbols) { cout << s << endl; }
+    // for (auto f : formulas) { cout << f << endl; }
+    TruthTable tt{formulas, symbols};
+
 }

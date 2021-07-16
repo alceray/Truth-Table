@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <stack>
-#include <unordered_set>
+#include <set>
 #include "valid.h"
 using namespace std;
 
@@ -16,7 +16,7 @@ Actual      Code       Num
 */
 
 
-static bool validSym(unordered_set<char> symbols, char ch) {
+static bool validSym(set<char> symbols, char ch) {
     for (auto sym : symbols) {
         if (ch == sym) return true;
     }
@@ -70,6 +70,10 @@ static bool validConnPos(string form, int len, int conn_count) {
         } else if (conn == 1) {
             j = i-1;
             k = i+1;
+            while (j > 0 && form[j-1] == '~') --j;
+            while (k < len-1 && form[k+1] == '~') ++k;
+            if (form[j] == '~') --j;
+            if (form[k] == '~') ++k;
             if (j >= 0 && (form[j] == ')' || isSym(form[j]))) return false;
             if (k >= len || !(form[k] == '(' || isSym(form[k]))) return false;
         } else {
@@ -90,17 +94,17 @@ static bool validConnPos(string form, int len, int conn_count) {
     return true;
 }
 
-bool validForm(string form, unordered_set<char> symbols) {
+bool validForm(string form, set<char> symbols) {
     int len = form.size();
     stack<char> stk;
-    int i = 0, sym_count = 0, bracket_pairs = 0, conn_count = 0;
+    int i = 0, sym_count = 0, bkt_pairs = 0, conn_count = 0;
     while (i < len) {
         char ch = form[i];
         // ensures all char are valid 
         if (!(ch == '(' || ch == ')' || validConn(form, i) > 0 || validSym(symbols, ch))) return false;
         if (ch == '(') {
             stk.push('(');
-            ++bracket_pairs;
+            ++bkt_pairs;
         } else if (ch == ')') {
             if (stk.empty() || stk.top() != '(') return false;
             stk.pop();
@@ -111,9 +115,9 @@ bool validForm(string form, unordered_set<char> symbols) {
         }
         ++i;
     }
-    // checks brackets are balanced, brackets aren't equal to the length, and there's at least 1 symbol
-    if (!stk.empty() || 2*bracket_pairs == len || sym_count == 0) return false; 
-    if (!checkSymAndBkt(form, len)) return false;
-    if (!validConnPos(form, len, conn_count)) return false;
+    // checks brackets are balanced, brackets aren't equal to the length, there's at least 1 symbol,
+    //     and much more
+    if (!stk.empty() || 2*bkt_pairs == len || sym_count == 0 || !checkSymAndBkt(form, len) ||\
+    !validConnPos(form, len, conn_count)) return false; 
     return true;
 }

@@ -4,9 +4,10 @@
 #include <string>
 #include <vector>
 #include <stack>
-#include <unordered_set>
+#include <set>
 using namespace std;
 
-bool validForm(string form, unordered_set<char> symbols);
+// checks a propositional formula is valid 
+bool validForm(string form, set<char> symbols);
 
 #endif
