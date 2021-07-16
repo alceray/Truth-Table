@@ -82,7 +82,7 @@ static bool validConnPos(string form, int len, int conn_count) {
             }
             k = i+1;
             if (j < 0 || !(form[j] == ')' || isSym(form[j]))) return false;
-            if (k >= len || !(k < len || form[k] == '(' || isSym(form[k]) || (validConn(form, k) == 1))) return false;
+            if (k >= len || !(form[k] == '(' || isSym(form[k]) || (validConn(form, k) == 1))) return false;
         } 
         ++i;
         --conn_count;
