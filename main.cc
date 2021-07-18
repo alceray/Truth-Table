@@ -7,14 +7,6 @@
 #include "truthtable.h"
 using namespace std;
 
-struct Formula {
-    string conn;
-    bool val;
-    char sym;
-    Formula *left;
-    Formula *right;
-};
-
 int main() {
     cout << "Welcome to truth table maker!" << endl;
     cout << "Use ~ for 'not'" << endl;
@@ -34,7 +26,6 @@ int main() {
     string form;
     while (cin >> form) {
         if (form == "." || form == ",") break;
-        // form.erase(remove(form.begin(), form.end(), ' '), form.end());
         if (validForm(form, symbols)) {
             formulas.push_back(form);
         } else {
@@ -44,5 +35,6 @@ int main() {
     // for (auto s : symbols) { cout << s << endl; }
     // for (auto f : formulas) { cout << f << endl; }
     TruthTable tt{formulas, symbols};
-
+    tt.evaluate();
+    tt.printTruthTable();
 }
